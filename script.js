@@ -21,7 +21,7 @@ buton.addEventListener("click", function() {
 });
 
 isimBtn.addEventListener("click", function() {
-  const isim = isimInput.value;
+  const isim = isimInput.value.trim();
 
   if (isim === "") {
     karsilama.textContent = "Lütfen önce adını yaz.";
@@ -31,19 +31,31 @@ isimBtn.addEventListener("click", function() {
 });
 
 konuBtn.addEventListener("click", function() {
-  const yeniKonu = konuInput.value;
+  const yeniKonu = konuInput.value.trim();
 
   if (yeniKonu === "") {
     konuUyari.textContent = "Lütfen eklemek istediğin konuyu yaz.";
   } else {
     const yeniMadde = document.createElement("li");
 
-    yeniMadde.textContent = yeniKonu;
+    const konuYazisi = document.createElement("span");
+    konuYazisi.textContent = yeniKonu;
+
+    const silButonu = document.createElement("button");
+    silButonu.textContent = "Sil";
+    silButonu.classList.add("silBtn");
+
+    silButonu.addEventListener("click", function() {
+      yeniMadde.remove();
+      konuUyari.textContent = "Konu listeden silindi.";
+    });
+
+    yeniMadde.appendChild(konuYazisi);
+    yeniMadde.appendChild(silButonu);
 
     konuListesi.appendChild(yeniMadde);
 
     konuInput.value = "";
-
     konuUyari.textContent = "Yeni konu listeye eklendi.";
   }
 });

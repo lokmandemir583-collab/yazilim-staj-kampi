@@ -13,6 +13,38 @@ const konuUyari = document.getElementById("konuUyari");
 
 let tiklamaSayisi = 0;
 
+let konular = JSON.parse(localStorage.getItem("konular")) || [];
+
+function konulariEkranaYaz() {
+  konuListesi.innerHTML = "";
+
+  konular.forEach(function(konu) {
+    const yeniMadde = document.createElement("li");
+
+    const konuYazisi = document.createElement("span");
+    konuYazisi.textContent = konu;
+
+    const silButonu = document.createElement("button");
+    silButonu.textContent = "Sil";
+    silButonu.classList.add("silBtn");
+
+    silButonu.addEventListener("click", function() {
+      konular = konular.filter(function(k) {
+        return k !== konu;
+      });
+
+      localStorage.setItem("konular", JSON.stringify(konular));
+      konulariEkranaYaz();
+      konuUyari.textContent = "Konu listeden silindi.";
+    });
+
+    yeniMadde.appendChild(konuYazisi);
+    yeniMadde.appendChild(silButonu);
+
+    konuListesi.appendChild(yeniMadde);
+  });
+}
+
 buton.addEventListener("click", function() {
   tiklamaSayisi = tiklamaSayisi + 1;
 
@@ -36,24 +68,11 @@ function konuEkle() {
   if (yeniKonu === "") {
     konuUyari.textContent = "Lütfen eklemek istediğin konuyu yaz.";
   } else {
-    const yeniMadde = document.createElement("li");
+    konular.push(yeniKonu);
 
-    const konuYazisi = document.createElement("span");
-    konuYazisi.textContent = yeniKonu;
+    localStorage.setItem("konular", JSON.stringify(konular));
 
-    const silButonu = document.createElement("button");
-    silButonu.textContent = "Sil";
-    silButonu.classList.add("silBtn");
-
-    silButonu.addEventListener("click", function() {
-      yeniMadde.remove();
-      konuUyari.textContent = "Konu listeden silindi.";
-    });
-
-    yeniMadde.appendChild(konuYazisi);
-    yeniMadde.appendChild(silButonu);
-
-    konuListesi.appendChild(yeniMadde);
+    konulariEkranaYaz();
 
     konuInput.value = "";
     konuUyari.textContent = "Yeni konu listeye eklendi.";
@@ -67,3 +86,5 @@ konuInput.addEventListener("keydown", function(event) {
     konuEkle();
   }
 });
+
+konulariEkranaYaz();

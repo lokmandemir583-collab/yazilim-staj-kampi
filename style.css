@@ -1,45 +1,46 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .container {
-    width: 80%;
-    max-width: 700px;
-    margin: 50px auto;
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-  }
-  
-  h1 {
-    color: #222;
-  }
-  
-  h2 {
-    color: #444;
-    margin-top: 25px;
-  }
-  
-  p {
-    line-height: 1.6;
-  }
-  
-  li {
-    margin-bottom: 8px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #222;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  ol {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 80%;
+  max-width: 700px;
+  margin: 50px auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+h1 {
+  color: #222;
+}
+
+h2 {
+  color: #444;
+  margin-top: 25px;
+}
+
+p {
+  line-height: 1.6;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #222;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+ol {
   background-color: #f9f9f9;
   padding: 20px;
   border-radius: 8px;
@@ -47,4 +48,13 @@ body {
 
 ol li {
   margin-bottom: 10px;
+}
+
+input {
+  padding: 10px;
+  width: 70%;
+  max-width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
 }

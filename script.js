@@ -30,7 +30,7 @@ isimBtn.addEventListener("click", function() {
   }
 });
 
-konuBtn.addEventListener("click", function() {
+function konuEkle() {
   const yeniKonu = konuInput.value.trim();
 
   if (yeniKonu === "") {
@@ -57,5 +57,13 @@ konuBtn.addEventListener("click", function() {
 
     konuInput.value = "";
     konuUyari.textContent = "Yeni konu listeye eklendi.";
+  }
+}
+
+konuBtn.addEventListener("click", konuEkle);
+
+konuInput.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    konuEkle();
   }
 });

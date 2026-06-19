@@ -6,6 +6,11 @@ const isimInput = document.getElementById("isimInput");
 const isimBtn = document.getElementById("isimBtn");
 const karsilama = document.getElementById("karsilama");
 
+const konuInput = document.getElementById("konuInput");
+const konuBtn = document.getElementById("konuBtn");
+const konuListesi = document.getElementById("konuListesi");
+const konuUyari = document.getElementById("konuUyari");
+
 let tiklamaSayisi = 0;
 
 buton.addEventListener("click", function() {
@@ -22,5 +27,23 @@ isimBtn.addEventListener("click", function() {
     karsilama.textContent = "Lütfen önce adını yaz.";
   } else {
     karsilama.textContent = "Merhaba " + isim + ", yazılım staj kampına hoş geldin!";
+  }
+});
+
+konuBtn.addEventListener("click", function() {
+  const yeniKonu = konuInput.value;
+
+  if (yeniKonu === "") {
+    konuUyari.textContent = "Lütfen eklemek istediğin konuyu yaz.";
+  } else {
+    const yeniMadde = document.createElement("li");
+
+    yeniMadde.textContent = yeniKonu;
+
+    konuListesi.appendChild(yeniMadde);
+
+    konuInput.value = "";
+
+    konuUyari.textContent = "Yeni konu listeye eklendi.";
   }
 });

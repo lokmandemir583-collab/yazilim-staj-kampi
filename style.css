@@ -39,3 +39,12 @@ body {
     border-radius: 5px;
     cursor: pointer;
   }
+  ol {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+ol li {
+  margin-bottom: 10px;
+}

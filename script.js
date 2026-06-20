@@ -11,9 +11,15 @@ const konuBtn = document.getElementById("konuBtn");
 const konuListesi = document.getElementById("konuListesi");
 const konuUyari = document.getElementById("konuUyari");
 
+const gorevInput = document.getElementById("gorevInput");
+const gorevBtn = document.getElementById("gorevBtn");
+const gorevListesi = document.getElementById("gorevListesi");
+const gorevUyari = document.getElementById("gorevUyari");
+
 let tiklamaSayisi = 0;
 
 let konular = JSON.parse(localStorage.getItem("konular")) || [];
+let gorevler = JSON.parse(localStorage.getItem("gorevler")) || [];
 
 function konulariEkranaYaz() {
   konuListesi.innerHTML = "";
@@ -42,6 +48,52 @@ function konulariEkranaYaz() {
     yeniMadde.appendChild(silButonu);
 
     konuListesi.appendChild(yeniMadde);
+  });
+}
+
+function gorevleriEkranaYaz() {
+  gorevListesi.innerHTML = "";
+
+  gorevler.forEach(function(gorev) {
+    const yeniMadde = document.createElement("li");
+
+    const gorevYazisi = document.createElement("span");
+    gorevYazisi.textContent = gorev.metin;
+
+    if (gorev.tamamlandi === true) {
+      gorevYazisi.classList.add("tamamlandi");
+    }
+
+    const tamamlaButonu = document.createElement("button");
+    tamamlaButonu.textContent = "Tamamlandı";
+    tamamlaButonu.classList.add("gorevBtn");
+
+    const silButonu = document.createElement("button");
+    silButonu.textContent = "Sil";
+    silButonu.classList.add("gorevBtn");
+
+    tamamlaButonu.addEventListener("click", function() {
+      gorev.tamamlandi = !gorev.tamamlandi;
+
+      localStorage.setItem("gorevler", JSON.stringify(gorevler));
+      gorevleriEkranaYaz();
+    });
+
+    silButonu.addEventListener("click", function() {
+      gorevler = gorevler.filter(function(g) {
+        return g.id !== gorev.id;
+      });
+
+      localStorage.setItem("gorevler", JSON.stringify(gorevler));
+      gorevleriEkranaYaz();
+      gorevUyari.textContent = "Görev silindi.";
+    });
+
+    yeniMadde.appendChild(gorevYazisi);
+    yeniMadde.appendChild(tamamlaButonu);
+    yeniMadde.appendChild(silButonu);
+
+    gorevListesi.appendChild(yeniMadde);
   });
 }
 
@@ -87,4 +139,36 @@ konuInput.addEventListener("keydown", function(event) {
   }
 });
 
+function gorevEkle() {
+  const yeniGorev = gorevInput.value.trim();
+
+  if (yeniGorev === "") {
+    gorevUyari.textContent = "Lütfen bir görev yaz.";
+  } else {
+    const gorev = {
+      id: Date.now(),
+      metin: yeniGorev,
+      tamamlandi: false
+    };
+
+    gorevler.push(gorev);
+
+    localStorage.setItem("gorevler", JSON.stringify(gorevler));
+
+    gorevleriEkranaYaz();
+
+    gorevInput.value = "";
+    gorevUyari.textContent = "Görev eklendi.";
+  }
+}
+
+gorevBtn.addEventListener("click", gorevEkle);
+
+gorevInput.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    gorevEkle();
+  }
+});
+
 konulariEkranaYaz();
+gorevleriEkranaYaz();

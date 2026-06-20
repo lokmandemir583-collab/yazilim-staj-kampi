@@ -65,3 +65,13 @@ input {
   color: white;
   font-size: 12px;
 }
+.tamamlandi {
+  text-decoration: line-through;
+  color: gray;
+}
+
+.gorevBtn {
+  margin-left: 10px;
+  padding: 5px 10px;
+  font-size: 12px;
+}

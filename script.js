@@ -16,10 +16,24 @@ const gorevBtn = document.getElementById("gorevBtn");
 const gorevListesi = document.getElementById("gorevListesi");
 const gorevUyari = document.getElementById("gorevUyari");
 
+const tumGorevlerBtn = document.getElementById("tumGorevlerBtn");
+const tamamlananGorevlerBtn = document.getElementById("tamamlananGorevlerBtn");
+const devamEdenGorevlerBtn = document.getElementById("devamEdenGorevlerBtn");
+
 let tiklamaSayisi = 0;
 
-let konular = JSON.parse(localStorage.getItem("konular")) || [];
+const varsayilanKonular = [
+  "Git ve GitHub kullanımı",
+  "HTML ve CSS temelleri",
+  "JavaScript temelleri",
+  "API mantığı",
+  "Basit proje geliştirme"
+];
+
+let konular = JSON.parse(localStorage.getItem("konular")) || varsayilanKonular;
 let gorevler = JSON.parse(localStorage.getItem("gorevler")) || [];
+
+let aktifFiltre = "tum";
 
 function konulariEkranaYaz() {
   konuListesi.innerHTML = "";
@@ -54,7 +68,21 @@ function konulariEkranaYaz() {
 function gorevleriEkranaYaz() {
   gorevListesi.innerHTML = "";
 
-  gorevler.forEach(function(gorev) {
+  let gosterilecekGorevler = gorevler;
+
+  if (aktifFiltre === "tamamlanan") {
+    gosterilecekGorevler = gorevler.filter(function(gorev) {
+      return gorev.tamamlandi === true;
+    });
+  }
+
+  if (aktifFiltre === "devamEden") {
+    gosterilecekGorevler = gorevler.filter(function(gorev) {
+      return gorev.tamamlandi === false;
+    });
+  }
+
+  gosterilecekGorevler.forEach(function(gorev) {
     const yeniMadde = document.createElement("li");
 
     const gorevYazisi = document.createElement("span");
@@ -199,6 +227,21 @@ gorevInput.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     gorevEkle();
   }
+});
+
+tumGorevlerBtn.addEventListener("click", function() {
+  aktifFiltre = "tum";
+  gorevleriEkranaYaz();
+});
+
+tamamlananGorevlerBtn.addEventListener("click", function() {
+  aktifFiltre = "tamamlanan";
+  gorevleriEkranaYaz();
+});
+
+devamEdenGorevlerBtn.addEventListener("click", function() {
+  aktifFiltre = "devamEden";
+  gorevleriEkranaYaz();
 });
 
 konulariEkranaYaz();

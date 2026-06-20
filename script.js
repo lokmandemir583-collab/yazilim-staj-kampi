@@ -20,6 +20,7 @@ const gorevOzeti = document.getElementById("gorevOzeti");
 const tumGorevlerBtn = document.getElementById("tumGorevlerBtn");
 const tamamlananGorevlerBtn = document.getElementById("tamamlananGorevlerBtn");
 const devamEdenGorevlerBtn = document.getElementById("devamEdenGorevlerBtn");
+const tamamlananlariTemizleBtn = document.getElementById("tamamlananlariTemizleBtn");
 
 let tiklamaSayisi = 0;
 
@@ -262,6 +263,18 @@ tamamlananGorevlerBtn.addEventListener("click", function() {
 devamEdenGorevlerBtn.addEventListener("click", function() {
   aktifFiltre = "devamEden";
   gorevleriEkranaYaz();
+});
+
+tamamlananlariTemizleBtn.addEventListener("click", function() {
+  gorevler = gorevler.filter(function(gorev) {
+    return gorev.tamamlandi === false;
+  });
+
+  localStorage.setItem("gorevler", JSON.stringify(gorevler));
+
+  gorevleriEkranaYaz();
+
+  gorevUyari.textContent = "Tamamlanan görevler temizlendi.";
 });
 
 konulariEkranaYaz();

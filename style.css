@@ -101,3 +101,7 @@ input {
   margin-bottom: 10px;
   font-weight: bold;
 }
+
+#tamamlananlariTemizleBtn {
+  background-color: #8e44ad;
+}

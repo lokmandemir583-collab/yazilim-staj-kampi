@@ -15,6 +15,7 @@ const gorevInput = document.getElementById("gorevInput");
 const gorevBtn = document.getElementById("gorevBtn");
 const gorevListesi = document.getElementById("gorevListesi");
 const gorevUyari = document.getElementById("gorevUyari");
+const gorevOzeti = document.getElementById("gorevOzeti");
 
 const tumGorevlerBtn = document.getElementById("tumGorevlerBtn");
 const tamamlananGorevlerBtn = document.getElementById("tamamlananGorevlerBtn");
@@ -65,8 +66,27 @@ function konulariEkranaYaz() {
   });
 }
 
+function gorevOzetiniGuncelle() {
+  const toplamGorev = gorevler.length;
+
+  const tamamlananGorev = gorevler.filter(function(gorev) {
+    return gorev.tamamlandi === true;
+  }).length;
+
+  const devamEdenGorev = gorevler.filter(function(gorev) {
+    return gorev.tamamlandi === false;
+  }).length;
+
+  gorevOzeti.textContent =
+    "Toplam görev: " + toplamGorev +
+    " | Tamamlanan: " + tamamlananGorev +
+    " | Devam eden: " + devamEdenGorev;
+}
+
 function gorevleriEkranaYaz() {
   gorevListesi.innerHTML = "";
+
+  gorevOzetiniGuncelle();
 
   let gosterilecekGorevler = gorevler;
 

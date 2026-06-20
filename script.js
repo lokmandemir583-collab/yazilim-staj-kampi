@@ -16,6 +16,7 @@ const gorevBtn = document.getElementById("gorevBtn");
 const gorevListesi = document.getElementById("gorevListesi");
 const gorevUyari = document.getElementById("gorevUyari");
 const gorevOzeti = document.getElementById("gorevOzeti");
+const aramaInput = document.getElementById("aramaInput");
 
 const tumGorevlerBtn = document.getElementById("tumGorevlerBtn");
 const tamamlananGorevlerBtn = document.getElementById("tamamlananGorevlerBtn");
@@ -36,6 +37,7 @@ let konular = JSON.parse(localStorage.getItem("konular")) || varsayilanKonular;
 let gorevler = JSON.parse(localStorage.getItem("gorevler")) || [];
 
 let aktifFiltre = "tum";
+let aramaMetni = "";
 
 function konulariEkranaYaz() {
   konuListesi.innerHTML = "";
@@ -100,6 +102,12 @@ function gorevleriEkranaYaz() {
   if (aktifFiltre === "devamEden") {
     gosterilecekGorevler = gorevler.filter(function(gorev) {
       return gorev.tamamlandi === false;
+    });
+  }
+
+  if (aramaMetni !== "") {
+    gosterilecekGorevler = gosterilecekGorevler.filter(function(gorev) {
+      return gorev.metin.toLowerCase().includes(aramaMetni);
     });
   }
 
@@ -275,6 +283,11 @@ tamamlananlariTemizleBtn.addEventListener("click", function() {
   gorevleriEkranaYaz();
 
   gorevUyari.textContent = "Tamamlanan görevler temizlendi.";
+});
+
+aramaInput.addEventListener("input", function() {
+  aramaMetni = aramaInput.value.toLowerCase().trim();
+  gorevleriEkranaYaz();
 });
 
 konulariEkranaYaz();

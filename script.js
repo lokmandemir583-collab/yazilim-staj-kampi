@@ -18,6 +18,7 @@ const gorevListesi = document.getElementById("gorevListesi");
 const gorevUyari = document.getElementById("gorevUyari");
 const gorevOzeti = document.getElementById("gorevOzeti");
 const aramaInput = document.getElementById("aramaInput");
+const oncelikFiltreSelect = document.getElementById("oncelikFiltreSelect");
 
 const tumGorevlerBtn = document.getElementById("tumGorevlerBtn");
 const tamamlananGorevlerBtn = document.getElementById("tamamlananGorevlerBtn");
@@ -39,6 +40,7 @@ let gorevler = JSON.parse(localStorage.getItem("gorevler")) || [];
 
 let aktifFiltre = "tum";
 let aramaMetni = "";
+let aktifOncelikFiltre = "tum";
 
 function konulariEkranaYaz() {
   konuListesi.innerHTML = "";
@@ -109,6 +111,13 @@ function gorevleriEkranaYaz() {
   if (aramaMetni !== "") {
     gosterilecekGorevler = gosterilecekGorevler.filter(function(gorev) {
       return gorev.metin.toLowerCase().includes(aramaMetni);
+    });
+  }
+
+  if (aktifOncelikFiltre !== "tum") {
+    gosterilecekGorevler = gosterilecekGorevler.filter(function(gorev) {
+      const gorevOnceligi = gorev.oncelik || "orta";
+      return gorevOnceligi === aktifOncelikFiltre;
     });
   }
 
@@ -306,6 +315,11 @@ tamamlananlariTemizleBtn.addEventListener("click", function() {
 
 aramaInput.addEventListener("input", function() {
   aramaMetni = aramaInput.value.toLowerCase().trim();
+  gorevleriEkranaYaz();
+});
+
+oncelikFiltreSelect.addEventListener("change", function() {
+  aktifOncelikFiltre = oncelikFiltreSelect.value;
   gorevleriEkranaYaz();
 });
 

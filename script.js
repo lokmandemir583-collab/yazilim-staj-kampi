@@ -65,8 +65,18 @@ function gorevleriEkranaYaz() {
     }
 
     const tamamlaButonu = document.createElement("button");
-    tamamlaButonu.textContent = "Tamamlandı";
+
+    if (gorev.tamamlandi === true) {
+      tamamlaButonu.textContent = "Geri Al";
+    } else {
+      tamamlaButonu.textContent = "Tamamlandı";
+    }
+
     tamamlaButonu.classList.add("gorevBtn");
+
+    const duzenleButonu = document.createElement("button");
+    duzenleButonu.textContent = "Düzenle";
+    duzenleButonu.classList.add("gorevBtn");
 
     const silButonu = document.createElement("button");
     silButonu.textContent = "Sil";
@@ -77,6 +87,26 @@ function gorevleriEkranaYaz() {
 
       localStorage.setItem("gorevler", JSON.stringify(gorevler));
       gorevleriEkranaYaz();
+    });
+
+    duzenleButonu.addEventListener("click", function() {
+      const yeniMetin = prompt("Görevi düzenle:", gorev.metin);
+
+      if (yeniMetin === null) {
+        return;
+      }
+
+      const temizMetin = yeniMetin.trim();
+
+      if (temizMetin === "") {
+        gorevUyari.textContent = "Görev boş bırakılamaz.";
+      } else {
+        gorev.metin = temizMetin;
+
+        localStorage.setItem("gorevler", JSON.stringify(gorevler));
+        gorevleriEkranaYaz();
+        gorevUyari.textContent = "Görev güncellendi.";
+      }
     });
 
     silButonu.addEventListener("click", function() {
@@ -91,6 +121,7 @@ function gorevleriEkranaYaz() {
 
     yeniMadde.appendChild(gorevYazisi);
     yeniMadde.appendChild(tamamlaButonu);
+    yeniMadde.appendChild(duzenleButonu);
     yeniMadde.appendChild(silButonu);
 
     gorevListesi.appendChild(yeniMadde);

@@ -19,6 +19,7 @@ const gorevUyari = document.getElementById("gorevUyari");
 const gorevOzeti = document.getElementById("gorevOzeti");
 const aramaInput = document.getElementById("aramaInput");
 const oncelikFiltreSelect = document.getElementById("oncelikFiltreSelect");
+const siralamaSelect = document.getElementById("siralamaSelect");
 
 const tumGorevlerBtn = document.getElementById("tumGorevlerBtn");
 const tamamlananGorevlerBtn = document.getElementById("tamamlananGorevlerBtn");
@@ -41,6 +42,7 @@ let gorevler = JSON.parse(localStorage.getItem("gorevler")) || [];
 let aktifFiltre = "tum";
 let aramaMetni = "";
 let aktifOncelikFiltre = "tum";
+let aktifSiralama = "normal";
 
 function konulariEkranaYaz() {
   konuListesi.innerHTML = "";
@@ -89,6 +91,16 @@ function gorevOzetiniGuncelle() {
     " | Devam eden: " + devamEdenGorev;
 }
 
+function oncelikPuani(oncelik) {
+  if (oncelik === "yuksek") {
+    return 3;
+  } else if (oncelik === "orta") {
+    return 2;
+  } else {
+    return 1;
+  }
+}
+
 function gorevleriEkranaYaz() {
   gorevListesi.innerHTML = "";
 
@@ -118,6 +130,20 @@ function gorevleriEkranaYaz() {
     gosterilecekGorevler = gosterilecekGorevler.filter(function(gorev) {
       const gorevOnceligi = gorev.oncelik || "orta";
       return gorevOnceligi === aktifOncelikFiltre;
+    });
+  }
+
+  gosterilecekGorevler = [...gosterilecekGorevler];
+
+  if (aktifSiralama === "yuksektenDusuge") {
+    gosterilecekGorevler.sort(function(a, b) {
+      return oncelikPuani(b.oncelik || "orta") - oncelikPuani(a.oncelik || "orta");
+    });
+  }
+
+  if (aktifSiralama === "dusuktenYuksege") {
+    gosterilecekGorevler.sort(function(a, b) {
+      return oncelikPuani(a.oncelik || "orta") - oncelikPuani(b.oncelik || "orta");
     });
   }
 
@@ -320,6 +346,11 @@ aramaInput.addEventListener("input", function() {
 
 oncelikFiltreSelect.addEventListener("change", function() {
   aktifOncelikFiltre = oncelikFiltreSelect.value;
+  gorevleriEkranaYaz();
+});
+
+siralamaSelect.addEventListener("change", function() {
+  aktifSiralama = siralamaSelect.value;
   gorevleriEkranaYaz();
 });
 

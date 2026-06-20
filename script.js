@@ -12,6 +12,7 @@ const konuListesi = document.getElementById("konuListesi");
 const konuUyari = document.getElementById("konuUyari");
 
 const gorevInput = document.getElementById("gorevInput");
+const oncelikSelect = document.getElementById("oncelikSelect");
 const gorevBtn = document.getElementById("gorevBtn");
 const gorevListesi = document.getElementById("gorevListesi");
 const gorevUyari = document.getElementById("gorevUyari");
@@ -121,6 +122,21 @@ function gorevleriEkranaYaz() {
       gorevYazisi.classList.add("tamamlandi");
     }
 
+    const oncelikDegeri = gorev.oncelik || "orta";
+
+    const oncelikYazisi = document.createElement("span");
+
+    if (oncelikDegeri === "dusuk") {
+      oncelikYazisi.textContent = "Düşük";
+      oncelikYazisi.classList.add("oncelik", "dusuk");
+    } else if (oncelikDegeri === "orta") {
+      oncelikYazisi.textContent = "Orta";
+      oncelikYazisi.classList.add("oncelik", "orta");
+    } else {
+      oncelikYazisi.textContent = "Yüksek";
+      oncelikYazisi.classList.add("oncelik", "yuksek");
+    }
+
     const tamamlaButonu = document.createElement("button");
 
     if (gorev.tamamlandi === true) {
@@ -177,6 +193,7 @@ function gorevleriEkranaYaz() {
     });
 
     yeniMadde.appendChild(gorevYazisi);
+    yeniMadde.appendChild(oncelikYazisi);
     yeniMadde.appendChild(tamamlaButonu);
     yeniMadde.appendChild(duzenleButonu);
     yeniMadde.appendChild(silButonu);
@@ -236,7 +253,8 @@ function gorevEkle() {
     const gorev = {
       id: Date.now(),
       metin: yeniGorev,
-      tamamlandi: false
+      tamamlandi: false,
+      oncelik: oncelikSelect.value
     };
 
     gorevler.push(gorev);
@@ -246,6 +264,7 @@ function gorevEkle() {
     gorevleriEkranaYaz();
 
     gorevInput.value = "";
+    oncelikSelect.value = "dusuk";
     gorevUyari.textContent = "Görev eklendi.";
   }
 }

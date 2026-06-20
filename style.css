@@ -64,6 +64,14 @@ input {
   margin-bottom: 10px;
 }
 
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
 .silBtn {
   margin-left: 10px;
   padding: 5px 10px;
@@ -104,4 +112,27 @@ input {
 
 #tamamlananlariTemizleBtn {
   background-color: #8e44ad;
+}
+
+.oncelik {
+  margin-left: 8px;
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.dusuk {
+  background-color: #d5f5e3;
+  color: #1e8449;
+}
+
+.orta {
+  background-color: #fcf3cf;
+  color: #b7950b;
+}
+
+.yuksek {
+  background-color: #fadbd8;
+  color: #c0392b;
 }

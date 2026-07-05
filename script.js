@@ -13,6 +13,7 @@ const konuUyari = document.getElementById("konuUyari");
 
 const gorevInput = document.getElementById("gorevInput");
 const oncelikSelect = document.getElementById("oncelikSelect");
+const tarihInput = document.getElementById("tarihInput");
 const gorevBtn = document.getElementById("gorevBtn");
 const gorevListesi = document.getElementById("gorevListesi");
 const gorevUyari = document.getElementById("gorevUyari");
@@ -150,6 +151,12 @@ function gorevleriEkranaYaz() {
   gosterilecekGorevler.forEach(function(gorev) {
     const yeniMadde = document.createElement("li");
 
+    const bugun = new Date().toISOString().split("T")[0];
+
+    if (gorev.tarih && gorev.tarih < bugun && gorev.tamamlandi === false) {
+      yeniMadde.classList.add("gecikti");
+    }
+
     const gorevYazisi = document.createElement("span");
     gorevYazisi.textContent = gorev.metin;
 
@@ -170,6 +177,13 @@ function gorevleriEkranaYaz() {
     } else {
       oncelikYazisi.textContent = "Yüksek";
       oncelikYazisi.classList.add("oncelik", "yuksek");
+    }
+
+    const tarihYazisi = document.createElement("span");
+
+    if (gorev.tarih) {
+      tarihYazisi.textContent = "Son tarih: " + gorev.tarih;
+      tarihYazisi.classList.add("tarih");
     }
 
     const tamamlaButonu = document.createElement("button");
@@ -229,6 +243,11 @@ function gorevleriEkranaYaz() {
 
     yeniMadde.appendChild(gorevYazisi);
     yeniMadde.appendChild(oncelikYazisi);
+
+    if (gorev.tarih) {
+      yeniMadde.appendChild(tarihYazisi);
+    }
+
     yeniMadde.appendChild(tamamlaButonu);
     yeniMadde.appendChild(duzenleButonu);
     yeniMadde.appendChild(silButonu);
@@ -289,7 +308,8 @@ function gorevEkle() {
       id: Date.now(),
       metin: yeniGorev,
       tamamlandi: false,
-      oncelik: oncelikSelect.value
+      oncelik: oncelikSelect.value,
+      tarih: tarihInput.value
     };
 
     gorevler.push(gorev);
@@ -300,6 +320,7 @@ function gorevEkle() {
 
     gorevInput.value = "";
     oncelikSelect.value = "dusuk";
+    tarihInput.value = "";
     gorevUyari.textContent = "Görev eklendi.";
   }
 }

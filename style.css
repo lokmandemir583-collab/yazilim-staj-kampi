@@ -136,3 +136,18 @@ select {
   background-color: #fadbd8;
   color: #c0392b;
 }
+
+.tarih {
+  margin-left: 8px;
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-size: 12px;
+  background-color: #eaf2f8;
+  color: #2874a6;
+}
+
+.gecikti {
+  background-color: #fdecea;
+  padding: 6px;
+  border-radius: 6px;
+}

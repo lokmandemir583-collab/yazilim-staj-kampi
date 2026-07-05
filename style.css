@@ -110,6 +110,10 @@ select {
   font-weight: bold;
 }
 
+#gecikenGorevlerBtn {
+  background-color: #e67e22;
+}
+
 #tamamlananlariTemizleBtn {
   background-color: #8e44ad;
 }

@@ -25,6 +25,7 @@ const siralamaSelect = document.getElementById("siralamaSelect");
 const tumGorevlerBtn = document.getElementById("tumGorevlerBtn");
 const tamamlananGorevlerBtn = document.getElementById("tamamlananGorevlerBtn");
 const devamEdenGorevlerBtn = document.getElementById("devamEdenGorevlerBtn");
+const gecikenGorevlerBtn = document.getElementById("gecikenGorevlerBtn");
 const tamamlananlariTemizleBtn = document.getElementById("tamamlananlariTemizleBtn");
 
 let tiklamaSayisi = 0;
@@ -118,6 +119,14 @@ function gorevleriEkranaYaz() {
   if (aktifFiltre === "devamEden") {
     gosterilecekGorevler = gorevler.filter(function(gorev) {
       return gorev.tamamlandi === false;
+    });
+  }
+
+  if (aktifFiltre === "geciken") {
+    const bugun = new Date().toISOString().split("T")[0];
+
+    gosterilecekGorevler = gorevler.filter(function(gorev) {
+      return gorev.tarih && gorev.tarih < bugun && gorev.tamamlandi === false;
     });
   }
 
@@ -345,6 +354,11 @@ tamamlananGorevlerBtn.addEventListener("click", function() {
 
 devamEdenGorevlerBtn.addEventListener("click", function() {
   aktifFiltre = "devamEden";
+  gorevleriEkranaYaz();
+});
+
+gecikenGorevlerBtn.addEventListener("click", function() {
+  aktifFiltre = "geciken";
   gorevleriEkranaYaz();
 });
 

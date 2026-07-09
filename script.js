@@ -16,8 +16,11 @@ const oncelikSelect = document.getElementById("oncelikSelect");
 const tarihInput = document.getElementById("tarihInput");
 const gorevBtn = document.getElementById("gorevBtn");
 const gorevListesi = document.getElementById("gorevListesi");
+const bosListeMesaji = document.getElementById("bosListeMesaji");
 const gorevUyari = document.getElementById("gorevUyari");
 const gorevOzeti = document.getElementById("gorevOzeti");
+const ilerlemeCubugu = document.getElementById("ilerlemeCubugu");
+const ilerlemeYazisi = document.getElementById("ilerlemeYazisi");
 const aramaInput = document.getElementById("aramaInput");
 const oncelikFiltreSelect = document.getElementById("oncelikFiltreSelect");
 const siralamaSelect = document.getElementById("siralamaSelect");
@@ -26,7 +29,9 @@ const tumGorevlerBtn = document.getElementById("tumGorevlerBtn");
 const tamamlananGorevlerBtn = document.getElementById("tamamlananGorevlerBtn");
 const devamEdenGorevlerBtn = document.getElementById("devamEdenGorevlerBtn");
 const gecikenGorevlerBtn = document.getElementById("gecikenGorevlerBtn");
+const filtreleriSifirlaBtn = document.getElementById("filtreleriSifirlaBtn");
 const tamamlananlariTemizleBtn = document.getElementById("tamamlananlariTemizleBtn");
+const tumGorevleriTemizleBtn = document.getElementById("tumGorevleriTemizleBtn");
 
 let tiklamaSayisi = 0;
 
@@ -91,6 +96,15 @@ function gorevOzetiniGuncelle() {
     "Toplam görev: " + toplamGorev +
     " | Tamamlanan: " + tamamlananGorev +
     " | Devam eden: " + devamEdenGorev;
+
+  let yuzde = 0;
+
+  if (toplamGorev > 0) {
+    yuzde = Math.round((tamamlananGorev / toplamGorev) * 100);
+  }
+
+  ilerlemeCubugu.style.width = yuzde + "%";
+  ilerlemeYazisi.textContent = "Tamamlanma: %" + yuzde;
 }
 
 function oncelikPuani(oncelik) {
@@ -103,10 +117,28 @@ function oncelikPuani(oncelik) {
   }
 }
 
+function filtreButonlariniGuncelle() {
+  tumGorevlerBtn.classList.remove("aktif-filtre");
+  tamamlananGorevlerBtn.classList.remove("aktif-filtre");
+  devamEdenGorevlerBtn.classList.remove("aktif-filtre");
+  gecikenGorevlerBtn.classList.remove("aktif-filtre");
+
+  if (aktifFiltre === "tum") {
+    tumGorevlerBtn.classList.add("aktif-filtre");
+  } else if (aktifFiltre === "tamamlanan") {
+    tamamlananGorevlerBtn.classList.add("aktif-filtre");
+  } else if (aktifFiltre === "devamEden") {
+    devamEdenGorevlerBtn.classList.add("aktif-filtre");
+  } else if (aktifFiltre === "geciken") {
+    gecikenGorevlerBtn.classList.add("aktif-filtre");
+  }
+}
+
 function gorevleriEkranaYaz() {
   gorevListesi.innerHTML = "";
 
   gorevOzetiniGuncelle();
+  filtreButonlariniGuncelle();
 
   let gosterilecekGorevler = gorevler;
 
@@ -155,6 +187,30 @@ function gorevleriEkranaYaz() {
     gosterilecekGorevler.sort(function(a, b) {
       return oncelikPuani(a.oncelik || "orta") - oncelikPuani(b.oncelik || "orta");
     });
+  }
+
+  if (aktifSiralama === "tarihYakindanUzaga") {
+    gosterilecekGorevler.sort(function(a, b) {
+      const tarihA = a.tarih || "9999-12-31";
+      const tarihB = b.tarih || "9999-12-31";
+
+      return tarihA.localeCompare(tarihB);
+    });
+  }
+
+  if (aktifSiralama === "tarihUzaktanYakina") {
+    gosterilecekGorevler.sort(function(a, b) {
+      const tarihA = a.tarih || "0000-01-01";
+      const tarihB = b.tarih || "0000-01-01";
+
+      return tarihB.localeCompare(tarihA);
+    });
+  }
+
+  if (gosterilecekGorevler.length === 0) {
+    bosListeMesaji.textContent = "Gösterilecek görev bulunamadı.";
+  } else {
+    bosListeMesaji.textContent = "";
   }
 
   gosterilecekGorevler.forEach(function(gorev) {
@@ -362,6 +418,21 @@ gecikenGorevlerBtn.addEventListener("click", function() {
   gorevleriEkranaYaz();
 });
 
+filtreleriSifirlaBtn.addEventListener("click", function() {
+  aktifFiltre = "tum";
+  aramaMetni = "";
+  aktifOncelikFiltre = "tum";
+  aktifSiralama = "normal";
+
+  aramaInput.value = "";
+  oncelikFiltreSelect.value = "tum";
+  siralamaSelect.value = "normal";
+
+  gorevleriEkranaYaz();
+
+  gorevUyari.textContent = "Filtreler sıfırlandı.";
+});
+
 tamamlananlariTemizleBtn.addEventListener("click", function() {
   gorevler = gorevler.filter(function(gorev) {
     return gorev.tamamlandi === false;
@@ -372,6 +443,22 @@ tamamlananlariTemizleBtn.addEventListener("click", function() {
   gorevleriEkranaYaz();
 
   gorevUyari.textContent = "Tamamlanan görevler temizlendi.";
+});
+
+tumGorevleriTemizleBtn.addEventListener("click", function() {
+  const onay = confirm("Tüm görevleri silmek istediğine emin misin?");
+
+  if (onay === true) {
+    gorevler = [];
+
+    localStorage.setItem("gorevler", JSON.stringify(gorevler));
+
+    gorevleriEkranaYaz();
+
+    gorevUyari.textContent = "Tüm görevler temizlendi.";
+  } else {
+    gorevUyari.textContent = "Silme işlemi iptal edildi.";
+  }
 });
 
 aramaInput.addEventListener("input", function() {

@@ -71,6 +71,14 @@
       Toplam görev: 0 | Tamamlanan: 0 | Devam eden: 0
     </div>
 
+    <div class="ilerleme-alani">
+      <div class="ilerleme-dis">
+        <div id="ilerlemeCubugu" class="ilerleme-ic"></div>
+      </div>
+
+      <p id="ilerlemeYazisi">Tamamlanma: %0</p>
+    </div>
+
     <input id="aramaInput" type="text" placeholder="Görevlerde ara">
 
     <select id="oncelikFiltreSelect">
@@ -84,6 +92,8 @@
       <option value="normal">Normal Sıralama</option>
       <option value="yuksektenDusuge">Öncelik: Yüksekten düşüğe</option>
       <option value="dusuktenYuksege">Öncelik: Düşükten yükseğe</option>
+      <option value="tarihYakindanUzaga">Son tarih: Yakından uzağa</option>
+      <option value="tarihUzaktanYakina">Son tarih: Uzaktan yakına</option>
     </select>
 
     <div class="filtreler">
@@ -91,10 +101,14 @@
       <button id="tamamlananGorevlerBtn">Tamamlananlar</button>
       <button id="devamEdenGorevlerBtn">Devam Edenler</button>
       <button id="gecikenGorevlerBtn">Geciken Görevler</button>
+      <button id="filtreleriSifirlaBtn">Filtreleri Sıfırla</button>
       <button id="tamamlananlariTemizleBtn">Tamamlananları Temizle</button>
+      <button id="tumGorevleriTemizleBtn">Tüm Görevleri Temizle</button>
     </div>
 
     <ul id="gorevListesi"></ul>
+
+    <p id="bosListeMesaji" class="bos-liste-mesaji"></p>
 
     <h2>Bugün Öğrendiklerim</h2>
 
@@ -103,6 +117,8 @@
       <li>CSS dosyasının sayfanın görünümünü düzenlediğini öğrendim.</li>
       <li>HTML ve CSS dosyalarını birbirine bağlamayı öğrendim.</li>
       <li>Yaptığım değişiklikleri GitHub’a göndermeyi tekrar ettim.</li>
+      <li>JavaScript ile görev ekleme, silme, düzenleme ve filtreleme yaptım.</li>
+      <li>localStorage ile verileri tarayıcıda saklamayı öğrendim.</li>
     </ol>
   </div>
 

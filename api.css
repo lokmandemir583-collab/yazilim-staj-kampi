@@ -84,3 +84,33 @@ input {
   background-color: #eef6fb;
   border-radius: 6px;
 }
+
+.post-btn {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding: 8px 14px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.post-alani {
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #f4fff7;
+  border-radius: 6px;
+}
+
+.gonderi-kutusu {
+  background-color: white;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border-left: 4px solid #27ae60;
+}
+
+.gonderi-kutusu h4 {
+  margin-top: 0;
+}

@@ -24,12 +24,15 @@ function kullanicilariEkranaYaz(liste) {
       <p><strong>Şirket:</strong> ${kullanici.company.name}</p>
 
       <button class="detay-btn">Detayları Göster</button>
+      <button class="post-btn">Gönderileri Göster</button>
 
       <div class="detay-alani" style="display: none;">
         <p><strong>Telefon:</strong> ${kullanici.phone}</p>
         <p><strong>Website:</strong> ${kullanici.website}</p>
         <p><strong>Adres:</strong> ${kullanici.address.street}, ${kullanici.address.suite}</p>
       </div>
+
+      <div class="post-alani" style="display: none;"></div>
     `;
 
     const detayBtn = kart.querySelector(".detay-btn");
@@ -43,6 +46,45 @@ function kullanicilariEkranaYaz(liste) {
         detayAlani.style.display = "none";
         detayBtn.textContent = "Detayları Göster";
       }
+    });
+
+    const postBtn = kart.querySelector(".post-btn");
+    const postAlani = kart.querySelector(".post-alani");
+
+    postBtn.addEventListener("click", function() {
+      if (postAlani.style.display === "block") {
+        postAlani.style.display = "none";
+        postBtn.textContent = "Gönderileri Göster";
+        return;
+      }
+
+      postAlani.style.display = "block";
+      postAlani.innerHTML = "<p>Gönderiler yükleniyor...</p>";
+      postBtn.textContent = "Gönderileri Gizle";
+
+      fetch(`https://jsonplaceholder.typicode.com/posts?userId=${kullanici.id}`)
+        .then(function(cevap) {
+          return cevap.json();
+        })
+        .then(function(gonderiler) {
+          postAlani.innerHTML = "";
+
+          gonderiler.forEach(function(gonderi) {
+            const gonderiKutusu = document.createElement("div");
+            gonderiKutusu.classList.add("gonderi-kutusu");
+
+            gonderiKutusu.innerHTML = `
+              <h4>${gonderi.title}</h4>
+              <p>${gonderi.body}</p>
+            `;
+
+            postAlani.appendChild(gonderiKutusu);
+          });
+        })
+        .catch(function(hata) {
+          postAlani.innerHTML = "<p>Gönderiler alınırken hata oluştu.</p>";
+          console.log(hata);
+        });
     });
 
     kullaniciListesi.appendChild(kart);

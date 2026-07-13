@@ -45,6 +45,19 @@ input {
   margin-top: 10px;
 }
 
+textarea {
+  display: block;
+  width: 70%;
+  max-width: 350px;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-family: Arial, sans-serif;
+}
+
 .kullanici-karti {
   background-color: #f9f9f9;
   padding: 15px;
@@ -142,4 +155,25 @@ input {
 
 .yorum-kutusu p {
   margin: 6px 0;
+}
+
+.post-form-alani {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border-left: 5px solid #8e44ad;
+}
+
+.post-form-alani h2 {
+  margin-top: 0;
+}
+
+#postGonderBtn {
+  background-color: #8e44ad;
+}
+
+#postSonucMesaji {
+  font-weight: bold;
 }

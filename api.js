@@ -3,6 +3,12 @@ const aramaInput = document.getElementById("aramaInput");
 const durumMesaji = document.getElementById("durumMesaji");
 const kullaniciListesi = document.getElementById("kullaniciListesi");
 
+const userIdInput = document.getElementById("userIdInput");
+const postBaslikInput = document.getElementById("postBaslikInput");
+const postMetinInput = document.getElementById("postMetinInput");
+const postGonderBtn = document.getElementById("postGonderBtn");
+const postSonucMesaji = document.getElementById("postSonucMesaji");
+
 let kullanicilar = [];
 
 function kullanicilariEkranaYaz(liste) {
@@ -182,4 +188,51 @@ aramaInput.addEventListener("input", function() {
   });
 
   kullanicilariEkranaYaz(filtrelenmisKullanicilar);
+});
+
+postGonderBtn.addEventListener("click", async function() {
+  const userId = userIdInput.value.trim();
+  const baslik = postBaslikInput.value.trim();
+  const metin = postMetinInput.value.trim();
+
+  if (userId === "" || baslik === "" || metin === "") {
+    postSonucMesaji.textContent = "Lütfen tüm alanları doldur.";
+    return;
+  }
+
+  postSonucMesaji.textContent = "Gönderi API’ye gönderiliyor...";
+
+  const yeniGonderi = {
+    userId: Number(userId),
+    title: baslik,
+    body: metin
+  };
+
+  try {
+    const cevap = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(yeniGonderi)
+    });
+
+    if (!cevap.ok) {
+      throw new Error("Gönderi oluşturulamadı.");
+    }
+
+    const sonuc = await cevap.json();
+
+    postSonucMesaji.textContent =
+      "Gönderi başarıyla API’ye gönderildi. Oluşan ID: " + sonuc.id;
+
+    userIdInput.value = "";
+    postBaslikInput.value = "";
+    postMetinInput.value = "";
+
+    console.log("API cevabı:", sonuc);
+  } catch (hata) {
+    postSonucMesaji.textContent = "Gönderi gönderilirken hata oluştu.";
+    console.log(hata);
+  }
 });

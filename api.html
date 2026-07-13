@@ -12,7 +12,7 @@
     <h1>API Çalışması</h1>
 
     <p>
-      Bu sayfada JavaScript ile internetten veri çekmeyi öğreneceğim.
+      Bu sayfada JavaScript ile internetten veri çekmeyi ve API’ye veri göndermeyi öğreneceğim.
     </p>
 
     <button id="veriGetirBtn">Kullanıcıları Getir</button>
@@ -20,6 +20,20 @@
     <input id="aramaInput" type="text" placeholder="Kullanıcı adı, email veya şehir ara">
 
     <p id="durumMesaji"></p>
+
+    <div class="post-form-alani">
+      <h2>Yeni Gönderi Oluştur</h2>
+
+      <input id="userIdInput" type="number" placeholder="Kullanıcı ID">
+
+      <input id="postBaslikInput" type="text" placeholder="Gönderi başlığı">
+
+      <textarea id="postMetinInput" placeholder="Gönderi metni"></textarea>
+
+      <button id="postGonderBtn">Gönderiyi API’ye Gönder</button>
+
+      <p id="postSonucMesaji"></p>
+    </div>
 
     <div id="kullaniciListesi"></div>
   </div>

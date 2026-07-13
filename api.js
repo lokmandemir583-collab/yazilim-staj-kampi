@@ -9,7 +9,220 @@ const postMetinInput = document.getElementById("postMetinInput");
 const postGonderBtn = document.getElementById("postGonderBtn");
 const postSonucMesaji = document.getElementById("postSonucMesaji");
 
+const deletePostIdInput = document.getElementById("deletePostIdInput");
+const deletePostBtn = document.getElementById("deletePostBtn");
+const deleteSonucMesaji = document.getElementById("deleteSonucMesaji");
+
+const kaydedilenPostListesi = document.getElementById("kaydedilenPostListesi");
+
 let kullanicilar = [];
+
+let kaydedilenPostlar = JSON.parse(localStorage.getItem("kaydedilenPostlar")) || [];
+
+function kaydedilenPostlariKaydet() {
+  localStorage.setItem("kaydedilenPostlar", JSON.stringify(kaydedilenPostlar));
+}
+
+function yeniLocalPostIdOlustur() {
+  if (kaydedilenPostlar.length === 0) {
+    return 1;
+  }
+
+  const enBuyukId = Math.max(...kaydedilenPostlar.map(function(post) {
+    return post.id;
+  }));
+
+  return enBuyukId + 1;
+}
+
+function kaydedilenPostlariEkranaYaz() {
+  kaydedilenPostListesi.innerHTML = "";
+
+  if (kaydedilenPostlar.length === 0) {
+    kaydedilenPostListesi.innerHTML =
+      '<p class="local-bos-mesaj">Henüz kaydedilen gönderi yok.</p>';
+    return;
+  }
+
+  kaydedilenPostlar.forEach(function(post) {
+    const postKart = document.createElement("div");
+    postKart.classList.add("local-post-karti");
+
+    postKart.innerHTML = `
+      <h3>${post.title}</h3>
+      <p><strong>Local ID:</strong> ${post.id}</p>
+      <p><strong>API ID:</strong> ${post.apiId}</p>
+      <p><strong>Kullanıcı ID:</strong> ${post.userId}</p>
+      <p>${post.body}</p>
+
+      <button class="local-duzenle-btn">PATCH ile Düzenle</button>
+      <button class="local-put-btn">PUT ile Tam Güncelle</button>
+      <button class="local-sil-btn">Bu Gönderiyi Sil</button>
+    `;
+
+    const localDuzenleBtn = postKart.querySelector(".local-duzenle-btn");
+    const localPutBtn = postKart.querySelector(".local-put-btn");
+    const localSilBtn = postKart.querySelector(".local-sil-btn");
+
+    localDuzenleBtn.addEventListener("click", async function() {
+      const yeniBaslik = prompt("Yeni başlığı yaz:", post.title);
+
+      if (yeniBaslik === null) {
+        return;
+      }
+
+      const yeniMetin = prompt("Yeni gönderi metnini yaz:", post.body);
+
+      if (yeniMetin === null) {
+        return;
+      }
+
+      const temizBaslik = yeniBaslik.trim();
+      const temizMetin = yeniMetin.trim();
+
+      if (temizBaslik === "" || temizMetin === "") {
+        postSonucMesaji.textContent = "Başlık ve metin boş bırakılamaz.";
+        return;
+      }
+
+      postSonucMesaji.textContent = "Gönderi PATCH ile güncelleniyor...";
+
+      try {
+        const cevap = await fetch(`https://jsonplaceholder.typicode.com/posts/${post.apiId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            title: temizBaslik,
+            body: temizMetin
+          })
+        });
+
+        if (!cevap.ok) {
+          throw new Error("Gönderi PATCH ile güncellenemedi.");
+        }
+
+        const sonuc = await cevap.json();
+
+        kaydedilenPostlar = kaydedilenPostlar.map(function(kayitliPost) {
+          if (kayitliPost.id === post.id) {
+            return {
+              ...kayitliPost,
+              title: temizBaslik,
+              body: temizMetin
+            };
+          }
+
+          return kayitliPost;
+        });
+
+        kaydedilenPostlariKaydet();
+        kaydedilenPostlariEkranaYaz();
+
+        postSonucMesaji.textContent =
+          post.id + " Local ID numaralı gönderi PATCH ile güncellendi.";
+
+        console.log("PATCH API cevabı:", sonuc);
+      } catch (hata) {
+        postSonucMesaji.textContent = "Gönderi PATCH ile güncellenirken hata oluştu.";
+        console.log(hata);
+      }
+    });
+
+    localPutBtn.addEventListener("click", async function() {
+      const yeniUserId = prompt("Yeni kullanıcı ID yaz:", post.userId);
+
+      if (yeniUserId === null) {
+        return;
+      }
+
+      const yeniBaslik = prompt("Yeni başlığı yaz:", post.title);
+
+      if (yeniBaslik === null) {
+        return;
+      }
+
+      const yeniMetin = prompt("Yeni gönderi metnini yaz:", post.body);
+
+      if (yeniMetin === null) {
+        return;
+      }
+
+      const temizUserId = yeniUserId.trim();
+      const temizBaslik = yeniBaslik.trim();
+      const temizMetin = yeniMetin.trim();
+
+      if (temizUserId === "" || temizBaslik === "" || temizMetin === "") {
+        postSonucMesaji.textContent = "Kullanıcı ID, başlık ve metin boş bırakılamaz.";
+        return;
+      }
+
+      postSonucMesaji.textContent = "Gönderi PUT ile tamamen güncelleniyor...";
+
+      const tamamenGuncellenenPost = {
+        id: post.apiId,
+        userId: Number(temizUserId),
+        title: temizBaslik,
+        body: temizMetin
+      };
+
+      try {
+        const cevap = await fetch(`https://jsonplaceholder.typicode.com/posts/${post.apiId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(tamamenGuncellenenPost)
+        });
+
+        if (!cevap.ok) {
+          throw new Error("Gönderi PUT ile güncellenemedi.");
+        }
+
+        const sonuc = await cevap.json();
+
+        kaydedilenPostlar = kaydedilenPostlar.map(function(kayitliPost) {
+          if (kayitliPost.id === post.id) {
+            return {
+              ...kayitliPost,
+              userId: Number(temizUserId),
+              title: temizBaslik,
+              body: temizMetin
+            };
+          }
+
+          return kayitliPost;
+        });
+
+        kaydedilenPostlariKaydet();
+        kaydedilenPostlariEkranaYaz();
+
+        postSonucMesaji.textContent =
+          post.id + " Local ID numaralı gönderi PUT ile tamamen güncellendi.";
+
+        console.log("PUT API cevabı:", sonuc);
+      } catch (hata) {
+        postSonucMesaji.textContent = "Gönderi PUT ile güncellenirken hata oluştu.";
+        console.log(hata);
+      }
+    });
+
+    localSilBtn.addEventListener("click", function() {
+      kaydedilenPostlar = kaydedilenPostlar.filter(function(kayitliPost) {
+        return kayitliPost.id !== post.id;
+      });
+
+      kaydedilenPostlariKaydet();
+      kaydedilenPostlariEkranaYaz();
+
+      deleteSonucMesaji.textContent =
+        post.id + " Local ID numaralı gönderi kaydedilenlerden silindi.";
+    });
+
+    kaydedilenPostListesi.appendChild(postKart);
+  });
+}
 
 function kullanicilariEkranaYaz(liste) {
   kullaniciListesi.innerHTML = "";
@@ -223,16 +436,79 @@ postGonderBtn.addEventListener("click", async function() {
 
     const sonuc = await cevap.json();
 
+    const kaydedilecekGonderi = {
+      id: yeniLocalPostIdOlustur(),
+      apiId: sonuc.id,
+      userId: Number(userId),
+      title: baslik,
+      body: metin
+    };
+
+    kaydedilenPostlar.push(kaydedilecekGonderi);
+    kaydedilenPostlariKaydet();
+    kaydedilenPostlariEkranaYaz();
+
     postSonucMesaji.textContent =
-      "Gönderi başarıyla API’ye gönderildi. Oluşan ID: " + sonuc.id;
+      "Gönderi API’ye gönderildi ve tarayıcıya kaydedildi. Local ID: " +
+      kaydedilecekGonderi.id;
 
     userIdInput.value = "";
     postBaslikInput.value = "";
     postMetinInput.value = "";
 
     console.log("API cevabı:", sonuc);
+    console.log("Tarayıcıya kaydedilen gönderi:", kaydedilecekGonderi);
   } catch (hata) {
     postSonucMesaji.textContent = "Gönderi gönderilirken hata oluştu.";
     console.log(hata);
   }
 });
+
+deletePostBtn.addEventListener("click", async function() {
+  const postId = deletePostIdInput.value.trim();
+
+  if (postId === "") {
+    deleteSonucMesaji.textContent = "Lütfen silinecek Local ID değerini yaz.";
+    return;
+  }
+
+  deleteSonucMesaji.textContent = "Gönderi siliniyor...";
+
+  try {
+    const cevap = await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`, {
+      method: "DELETE"
+    });
+
+    if (!cevap.ok) {
+      throw new Error("Gönderi silinemedi.");
+    }
+
+    const postIdNumber = Number(postId);
+
+    const oncekiUzunluk = kaydedilenPostlar.length;
+
+    kaydedilenPostlar = kaydedilenPostlar.filter(function(post) {
+      return post.id !== postIdNumber;
+    });
+
+    kaydedilenPostlariKaydet();
+    kaydedilenPostlariEkranaYaz();
+
+    deletePostIdInput.value = "";
+
+    if (kaydedilenPostlar.length < oncekiUzunluk) {
+      deleteSonucMesaji.textContent =
+        postId + " Local ID numaralı gönderi kaydedilenlerden silindi.";
+    } else {
+      deleteSonucMesaji.textContent =
+        "API’ye silme isteği gönderildi fakat bu Local ID ile kayıtlı gönderi bulunamadı.";
+    }
+
+    console.log("Silme işlemi başarılı:", cevap);
+  } catch (hata) {
+    deleteSonucMesaji.textContent = "Gönderi silinirken hata oluştu.";
+    console.log(hata);
+  }
+});
+
+kaydedilenPostlariEkranaYaz();

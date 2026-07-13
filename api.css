@@ -177,3 +177,86 @@ textarea {
 #postSonucMesaji {
   font-weight: bold;
 }
+
+.delete-form-alani {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  padding: 20px;
+  background-color: #fdf2f2;
+  border-radius: 8px;
+  border-left: 5px solid #c0392b;
+}
+
+.delete-form-alani h2 {
+  margin-top: 0;
+}
+
+#deletePostBtn {
+  background-color: #c0392b;
+}
+
+#deleteSonucMesaji {
+  font-weight: bold;
+}
+
+.local-post-alani {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  padding: 20px;
+  background-color: #f4f6ff;
+  border-radius: 8px;
+  border-left: 5px solid #34495e;
+}
+
+.local-post-alani h2 {
+  margin-top: 0;
+}
+
+.local-post-karti {
+  background-color: white;
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 6px;
+  border-left: 4px solid #34495e;
+}
+
+.local-post-karti h3 {
+  margin-top: 0;
+}
+
+.local-duzenle-btn {
+  padding: 7px 12px;
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 8px;
+  margin-top: 8px;
+}
+
+.local-put-btn {
+  padding: 7px 12px;
+  background-color: #16a085;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 8px;
+  margin-top: 8px;
+}
+
+.local-sil-btn {
+  padding: 7px 12px;
+  background-color: #c0392b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.local-bos-mesaj {
+  color: #777;
+  font-style: italic;
+}

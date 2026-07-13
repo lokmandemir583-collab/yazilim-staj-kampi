@@ -12,7 +12,9 @@
     <h1>API Çalışması</h1>
 
     <p>
-      Bu sayfada JavaScript ile internetten veri çekmeyi ve API’ye veri göndermeyi öğreneceğim.
+      Bu sayfada JavaScript ile internetten veri çekmeyi, API’ye veri göndermeyi,
+      API’den veri silme isteği göndermeyi, API’de veri güncellemeyi ve localStorage ile
+      verileri saklamayı öğreneceğim.
     </p>
 
     <button id="veriGetirBtn">Kullanıcıları Getir</button>
@@ -33,6 +35,26 @@
       <button id="postGonderBtn">Gönderiyi API’ye Gönder</button>
 
       <p id="postSonucMesaji"></p>
+    </div>
+
+    <div class="delete-form-alani">
+      <h2>Gönderi Sil</h2>
+
+      <input id="deletePostIdInput" type="number" placeholder="Silinecek Local ID">
+
+      <button id="deletePostBtn">Gönderiyi Sil</button>
+
+      <p id="deleteSonucMesaji"></p>
+    </div>
+
+    <div class="local-post-alani">
+      <h2>Kaydedilen Gönderiler</h2>
+
+      <p>
+        API’ye gönderdiğim ve tarayıcıda sakladığım gönderiler burada görünecek.
+      </p>
+
+      <div id="kaydedilenPostListesi"></div>
     </div>
 
     <div id="kullaniciListesi"></div>

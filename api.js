@@ -51,7 +51,7 @@ function kullanicilariEkranaYaz(liste) {
     const postBtn = kart.querySelector(".post-btn");
     const postAlani = kart.querySelector(".post-alani");
 
-    postBtn.addEventListener("click", function() {
+    postBtn.addEventListener("click", async function() {
       if (postAlani.style.display === "block") {
         postAlani.style.display = "none";
         postBtn.textContent = "Gönderileri Göster";
@@ -62,55 +62,108 @@ function kullanicilariEkranaYaz(liste) {
       postAlani.innerHTML = "<p>Gönderiler yükleniyor...</p>";
       postBtn.textContent = "Gönderileri Gizle";
 
-      fetch(`https://jsonplaceholder.typicode.com/posts?userId=${kullanici.id}`)
-        .then(function(cevap) {
-          return cevap.json();
-        })
-        .then(function(gonderiler) {
-          postAlani.innerHTML = "";
+      try {
+        const cevap = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${kullanici.id}`);
 
-          gonderiler.forEach(function(gonderi) {
-            const gonderiKutusu = document.createElement("div");
-            gonderiKutusu.classList.add("gonderi-kutusu");
+        if (!cevap.ok) {
+          throw new Error("Gönderiler alınamadı.");
+        }
 
-            gonderiKutusu.innerHTML = `
-              <h4>${gonderi.title}</h4>
-              <p>${gonderi.body}</p>
-            `;
+        const gonderiler = await cevap.json();
 
-            postAlani.appendChild(gonderiKutusu);
+        postAlani.innerHTML = "";
+
+        gonderiler.forEach(function(gonderi) {
+          const gonderiKutusu = document.createElement("div");
+          gonderiKutusu.classList.add("gonderi-kutusu");
+
+          gonderiKutusu.innerHTML = `
+            <h4>${gonderi.title}</h4>
+            <p>${gonderi.body}</p>
+
+            <button class="yorum-btn">Yorumları Göster</button>
+
+            <div class="yorum-alani" style="display: none;"></div>
+          `;
+
+          const yorumBtn = gonderiKutusu.querySelector(".yorum-btn");
+          const yorumAlani = gonderiKutusu.querySelector(".yorum-alani");
+
+          yorumBtn.addEventListener("click", async function() {
+            if (yorumAlani.style.display === "block") {
+              yorumAlani.style.display = "none";
+              yorumBtn.textContent = "Yorumları Göster";
+              return;
+            }
+
+            yorumAlani.style.display = "block";
+            yorumAlani.innerHTML = "<p>Yorumlar yükleniyor...</p>";
+            yorumBtn.textContent = "Yorumları Gizle";
+
+            try {
+              const cevap = await fetch(`https://jsonplaceholder.typicode.com/comments?postId=${gonderi.id}`);
+
+              if (!cevap.ok) {
+                throw new Error("Yorumlar alınamadı.");
+              }
+
+              const yorumlar = await cevap.json();
+
+              yorumAlani.innerHTML = "";
+
+              yorumlar.forEach(function(yorum) {
+                const yorumKutusu = document.createElement("div");
+                yorumKutusu.classList.add("yorum-kutusu");
+
+                yorumKutusu.innerHTML = `
+                  <p><strong>${yorum.name}</strong></p>
+                  <p><strong>Email:</strong> ${yorum.email}</p>
+                  <p>${yorum.body}</p>
+                `;
+
+                yorumAlani.appendChild(yorumKutusu);
+              });
+            } catch (hata) {
+              yorumAlani.innerHTML = "<p>Yorumlar alınırken hata oluştu.</p>";
+              console.log(hata);
+            }
           });
-        })
-        .catch(function(hata) {
-          postAlani.innerHTML = "<p>Gönderiler alınırken hata oluştu.</p>";
-          console.log(hata);
+
+          postAlani.appendChild(gonderiKutusu);
         });
+      } catch (hata) {
+        postAlani.innerHTML = "<p>Gönderiler alınırken hata oluştu.</p>";
+        console.log(hata);
+      }
     });
 
     kullaniciListesi.appendChild(kart);
   });
 }
 
-veriGetirBtn.addEventListener("click", function() {
+veriGetirBtn.addEventListener("click", async function() {
   durumMesaji.textContent = "Veriler yükleniyor...";
   kullaniciListesi.innerHTML = "";
   aramaInput.value = "";
 
-  fetch("https://jsonplaceholder.typicode.com/users")
-    .then(function(cevap) {
-      return cevap.json();
-    })
-    .then(function(gelenKullanicilar) {
-      kullanicilar = gelenKullanicilar;
+  try {
+    const cevap = await fetch("https://jsonplaceholder.typicode.com/users");
 
-      durumMesaji.textContent = "Veriler başarıyla getirildi.";
+    if (!cevap.ok) {
+      throw new Error("Kullanıcılar alınamadı.");
+    }
 
-      kullanicilariEkranaYaz(kullanicilar);
-    })
-    .catch(function(hata) {
-      durumMesaji.textContent = "Veriler alınırken bir hata oluştu.";
-      console.log(hata);
-    });
+    const gelenKullanicilar = await cevap.json();
+
+    kullanicilar = gelenKullanicilar;
+
+    durumMesaji.textContent = "Veriler başarıyla getirildi.";
+
+    kullanicilariEkranaYaz(kullanicilar);
+  } catch (hata) {
+    durumMesaji.textContent = "Veriler alınırken bir hata oluştu.";
+    console.log(hata);
+  }
 });
 
 aramaInput.addEventListener("input", function() {

@@ -114,3 +114,32 @@ input {
 .gonderi-kutusu h4 {
   margin-top: 0;
 }
+
+.yorum-btn {
+  margin-top: 8px;
+  padding: 7px 12px;
+  background-color: #f39c12;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.yorum-alani {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #fff8e8;
+  border-radius: 6px;
+}
+
+.yorum-kutusu {
+  background-color: white;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border-left: 4px solid #f39c12;
+}
+
+.yorum-kutusu p {
+  margin: 6px 0;
+}
